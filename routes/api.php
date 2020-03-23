@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Auth
+Route::post('admin/login', 'admin\auth_c@login');
 Route::group(["middleware" => "auth:admin-api"], function(){
   Route::get('/', function(){
     return 'Nanti di isi dokumentasi penggunaan API, Endpoint, Method, dll';
