@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return bcrypt('admin');
-});
+Route::get('/', 'home_c@index');
 
 Auth::routes();
 
