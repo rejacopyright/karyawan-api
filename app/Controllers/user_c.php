@@ -12,10 +12,12 @@ use App\user_image as img;
 
 class user_c extends Controller
 {
-  function user(){
-    $user = User::paginate(10)->map(function($i){
-      $i->img->map(function($m){
-        $m['base'] = base64_encode(file_get_contents(url('public/img/user/thumb/'.$m['name'])));
+  function user(Request $data){
+    $user = User::paginate(10)->map(function($i) use($data){
+      $i->img->map(function($m) use($data){
+        if (!$data->noBase) {
+          $m['base'] = base64_encode(file_get_contents(url('public/img/user/thumb/'.$m['name'])));
+        }
         return $m;
       });
       return $i;
