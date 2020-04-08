@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\admin;
+namespace App\Http\Controllers\admin;
 
-use App\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Hash;
 use Auth;

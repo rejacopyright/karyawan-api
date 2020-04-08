@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Storage;
@@ -16,5 +16,8 @@ class guest_c extends Controller
     // }
     $path = base64_encode(file_get_contents(url('public/img/capture1.jpg')));
     return $path;
+  }
+  function absen(Request $data){
+    return user::orderBy('created')->paginate(10);
   }
 }

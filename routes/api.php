@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // Auth
 Route::post('admin/login', 'admin\auth_c@login');
+Route::get('user/absen', 'guest_c@absen');
 // Get Image Data
 Route::get('image_data', 'guest_c@image_data');
 Route::group(["middleware" => "auth:admin-api"], function(){

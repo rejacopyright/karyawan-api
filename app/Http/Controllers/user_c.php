@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Storage;
@@ -16,7 +16,7 @@ class user_c extends Controller
     $user = User::paginate(10)->map(function($i) use($data){
       $i->img->map(function($m) use($data){
         if (!$data->noBase) {
-          $m['base'] = base64_encode(file_get_contents(url('public/img/user/thumb/'.$m['name'])));
+          $m['base'] = base64_encode(file_get_contents(url('public/img/user/'.$m['name'])));
         }
         return $m;
       });
