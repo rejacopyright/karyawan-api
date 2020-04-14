@@ -19,6 +19,6 @@ class guest_c extends Controller
     return $path;
   }
   function absen(Request $data){
-    return User::orderBy('created')->paginate(10);
+    return User::orderBy('created_at')->paginate(10);
   }
 }
