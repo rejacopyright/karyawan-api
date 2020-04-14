@@ -15,16 +15,13 @@ class guest_c extends Controller
     return $image;
   }
   function absen(Request $data){
-<<<<<<< HEAD
-    return User::orderBy('created_at')->paginate(10);
-=======
     $absen = face::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->paginate(10)->map(function($i){
       $usr = User::where('id', $i->user_id)->first();
       $i['user'] = $usr;
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     });
-    
+
     // $absen = ($absen->toArray());
     $absen_id = face::whereDate('created_at', Carbon::today())->distinct('user_id')->pluck('user_id')->all();
     $belum = User::whereNotIn('id', $absen_id)->paginate(10)->map(function($r){
@@ -33,6 +30,5 @@ class guest_c extends Controller
     });
     $count = face::whereDate('created_at', date('Y-m-d'))->count();
     return compact('absen', 'belum', 'count');
->>>>>>> de5730265b81d35b0321f21ebb883e6ce0248ae6
   }
 }
