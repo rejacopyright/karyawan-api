@@ -17,4 +17,6 @@ Route::group(["middleware" => "auth:admin-api"], function(){
   Route::post('user/store', 'user_c@store');
   Route::post('user/update', 'user_c@update');
   Route::post('user/delete', 'user_c@delete');
+  Route::get('setting', 'setting_c@setting');
+  Route::post('setting/update', 'setting_c@update');
 });
