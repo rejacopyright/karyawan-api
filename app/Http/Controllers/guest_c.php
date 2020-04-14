@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Storage;
 use Str;
 use Image;
+use App\User;
 
 class guest_c extends Controller
 {
@@ -18,6 +19,6 @@ class guest_c extends Controller
     return $path;
   }
   function absen(Request $data){
-    return user::orderBy('created')->paginate(10);
+    return User::orderBy('created')->paginate(10);
   }
 }
