@@ -13,9 +13,11 @@ class absen_c extends Controller
   function absen(Request $data){
     $userToday = face::whereDate('created_at', Carbon::today());
     $absen = $userToday->groupBy('user_id')->paginate(10)->map(function($i) use($userToday){
-      $i['user'] = User::where('id', $i->user_id)->first();
+      $usr = User::where('id', $i->user_id)->first();
+      $i['user'] = $usr;
       $i['first_capture'] = face::whereDate('created_at', Carbon::today())->where('user_id', $i->user_id)->orderBy('created_at', 'ASC')->pluck('created_at')->first();
       $i['last_capture'] = face::whereDate('created_at', Carbon::today())->where('user_id', $i->user_id)->orderBy('created_at', 'DESC')->pluck('created_at')->first();
+      $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     });
     // $absen = ($absen->toArray());
