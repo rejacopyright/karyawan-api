@@ -13,7 +13,10 @@ use App\user_image as img;
 class user_c extends Controller
 {
   function user(Request $data){
-    $user = User::paginate(10)->map(function($i) use($data){
+    $page = user::orderBy('updated_at', 'DESC');
+    if ($data->q) { $page->where('name', 'like', '%'.$data->q.'%'); }
+    $page = $page->paginate(10);
+    $user = $page->map(function($i) use($data){
       $i->img->map(function($m) use($data){
         if (!$data->noBase) {
           $m['base'] = base64_encode(file_get_contents(url('public/img/user/'.$m['name'])));
@@ -22,7 +25,7 @@ class user_c extends Controller
       });
       return $i;
     });
-    return $user;
+    return compact('user', 'page');
   }
   function detail($user_id){
     $user = User::where('user_id', $user_id)->first();
@@ -102,6 +105,6 @@ class user_c extends Controller
       img::where('user_id', $data->user_id)->delete();
     }
     $user->delete();
-    return $this->user();
+    return ['update' => $user, 'user' => $this->user($data)['user']];
   }
 }
