@@ -68,13 +68,17 @@ class user_c extends Controller
     $user = User::where('user_id', $data->user_id)->first();
     if ($data->name) { $user->name = $data->name; }
     if ($data->gender) { $user->gender = $data->gender; }
-    $user->job = $data->job;
-    $user->nik = $data->nik;
-    $user->kk = $data->kk;
-    $user->tlp = $data->tlp;
-    $user->alamat = $data->alamat;
+    if ($data->has('job')) { $user->job = $data->job; }
+    if ($data->has('nik')) { $user->nik = $data->nik; }
+    if ($data->has('kk')) { $user->kk = $data->kk; }
+    if ($data->has('tlp')) { $user->tlp = $data->tlp; }
+    if ($data->has('alamat')) { $user->alamat = $data->alamat; }
+    if ($data->has('u_pokok')) { $user->u_pokok = $data->u_pokok; }
+    if ($data->has('u_makan')) { $user->u_makan = $data->u_makan; }
+    if ($data->has('u_transport')) { $user->u_transport = $data->u_transport; }
+    if ($data->has('u_anis')) { $user->u_anis = $data->u_anis; }
     if ($data->username) { $user->username = $data->username; }
-    $user->password = bcrypt(($data->password ?? '0000'));
+    if ($data->has('password')) { $user->password = bcrypt(($data->password ?? '0000')); }
     if ($data->email) { $user->email = $data->email; }
     $user->save();
 
@@ -95,7 +99,8 @@ class user_c extends Controller
         img::create(['image_id' => $image_id+$i, 'user_id' => $user->user_id, 'name' => $filename]);
       }
     }
-    return $user;
+    $user->img;
+    return ['update' => $user, 'user' => $this->user($data)['user']];
   }
   function delete(Request $data){
     $user = User::where('user_id', $data->user_id)->first();
