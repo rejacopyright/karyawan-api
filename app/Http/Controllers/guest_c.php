@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\face;
+use App\device;
 use App\User;
 use App\user_image as img;
 use Carbon\Carbon;
@@ -30,5 +31,42 @@ class guest_c extends Controller
     });
     $count = face::whereDate('created_at', date('Y-m-d'))->count();
     return compact('absen', 'belum', 'count');
+  }
+  function face(Request $data){
+    $page = face::orderBy('created_at', 'DESC');
+    if ($data->q) {
+      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('id')->pluck('id')->all();
+      $page = $page->whereIn('user_id', $user_id);
+    }
+    $face = $page->paginate(10)->map(function($r){
+      $user = User::where('id', $r->user_id)->first();
+      $user->id = $r->id;
+      return $user;
+    });
+    return $face;
+  }
+  function devices(Request $data){
+    $page = device::orderBy('created_at', 'DESC');
+    if ($data->q) {
+      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('id')->pluck('id')->all();
+      $page = $page->whereIn('user_id', $user_id);
+    }
+    if ($data->device_id) {
+      $page = $page->whereIn('device_id', $data->device_id);
+    }else {
+      $page = $page->where('device_id', device::orderBy('device_id')->first()->device_id);
+    }
+    $device = $page->paginate(10)->map(function($r){
+      $user = User::where('id', $r->user_id)->first();
+      $user->id = $r->id;
+      return $user;
+    });
+    dd($device);
+    return $device;
+  }
+  function devices_list(Request $data){
+    $all = device::distinct('device_id')->pluck('device_id')->all();
+    $default = device::orderBy('device_id')->first()->device_id;
+    return compact('all', 'default');
   }
 }

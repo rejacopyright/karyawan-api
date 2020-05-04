@@ -9,11 +9,13 @@ use Image;
 use App\Admin;
 use App\User;
 use App\user_image as img;
+use App\user_title as title;
 
 class user_c extends Controller
 {
   function user(Request $data){
     $page = user::orderBy('updated_at', 'DESC');
+    if ($data->jabatan_id) { $page->where('jabatan_id', $data->jabatan_id); }
     if ($data->q) { $page->where('name', 'like', '%'.$data->q.'%'); }
     $page = $page->paginate(10);
     $user = $page->map(function($i) use($data){
@@ -23,6 +25,7 @@ class user_c extends Controller
         }
         return $m;
       });
+      $i->jabatan = $i->jabatan;
       return $i;
     });
     return compact('user', 'page');
@@ -38,7 +41,7 @@ class user_c extends Controller
     $user->user_id = $user_id;
     $user->name = $data->name;
     $user->gender = $data->gender;
-    $user->job = $data->job;
+    $user->jabatan_id = $data->jabatan_id;
     $user->nik = $data->nik;
     $user->kk = $data->kk;
     $user->tlp = $data->tlp;
@@ -67,8 +70,8 @@ class user_c extends Controller
   function update(Request $data){
     $user = User::where('user_id', $data->user_id)->first();
     if ($data->name) { $user->name = $data->name; }
-    if ($data->gender) { $user->gender = $data->gender; }
-    if ($data->has('job')) { $user->job = $data->job; }
+    if ($data->has('gender')) { $user->gender = $data->gender; }
+    if ($data->jabatan_id) { $user->jabatan_id = $data->jabatan_id; }
     if ($data->has('nik')) { $user->nik = $data->nik; }
     if ($data->has('kk')) { $user->kk = $data->kk; }
     if ($data->has('tlp')) { $user->tlp = $data->tlp; }

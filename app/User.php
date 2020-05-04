@@ -32,6 +32,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    // PARENT
+    function jabatan(){
+      return $this->belongsTo('App\jabatan', 'jabatan_id', 'jabatan_id');
+    }
     // CHILD
     function img(){
       return $this->hasMany('App\user_image', 'user_id', 'user_id');

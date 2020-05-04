@@ -37,4 +37,12 @@ class absen_c extends Controller
     $count = face::whereDate('created_at', date('Y-m-d'))->count();
     return compact('absen', 'absen_page', 'belum', 'belum_page', 'count');
   }
+  function test(Request $data){
+    $page = face::paginate(5);
+    $absen = $page->map(function($i){
+      $i->user = user::where('id', $i->user_id)->first();
+      return $i;
+    });
+    return compact('page', 'absen');
+  }
 }
