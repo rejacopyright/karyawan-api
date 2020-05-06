@@ -12,35 +12,34 @@ use Carbon\Carbon;
 class guest_c extends Controller
 {
   function image_data(){
-      $image = base64_encode(file_get_contents(url('public/img/capture1.jpg')));
+    $image = base64_encode(file_get_contents(url('public/img/capture1.jpg')));
     return $image;
   }
   function absen(Request $data){
-    $absen = face::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->paginate(10)->map(function($i){
-      $usr = User::where('id', $i->user_id)->first();
+    $absen = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->paginate(10)->map(function($i){
+      $usr = User::where('user_id', $i->user_id)->first();
       $i['user'] = $usr;
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     });
 
     // $absen = ($absen->toArray());
-    $absen_id = face::whereDate('created_at', Carbon::today())->distinct('user_id')->pluck('user_id')->all();
-    $belum = User::whereNotIn('id', $absen_id)->paginate(10)->map(function($r){
+    $absen_id = device::whereDate('created_at', Carbon::today())->distinct('user_id')->pluck('user_id')->all();
+    $belum = User::whereNotIn('user_id', $absen_id)->paginate(10)->map(function($r){
       $r['img'] = img::where('user_id', $r->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $r;
     });
-    $count = face::whereDate('created_at', date('Y-m-d'))->count();
+    $count = device::whereDate('created_at', date('Y-m-d'))->count();
     return compact('absen', 'belum', 'count');
   }
   function face(Request $data){
     $page = face::orderBy('created_at', 'DESC');
     if ($data->q) {
-      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('id')->pluck('id')->all();
+      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('user_id')->pluck('user_id')->all();
       $page = $page->whereIn('user_id', $user_id);
     }
     $face = $page->paginate(10)->map(function($r){
-      $user = User::where('id', $r->user_id)->first();
-      $user->id = $r->id;
+      $user = User::where('user_id', $r->user_id)->first();
       return $user;
     });
     return $face;
@@ -48,7 +47,7 @@ class guest_c extends Controller
   function devices(Request $data){
     $page = device::orderBy('created_at', 'DESC');
     if ($data->q) {
-      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('id')->pluck('id')->all();
+      $user_id = user::where('name', 'like', '%'.$data->q.'%')->distinct('user_id')->pluck('user_id')->all();
       $page = $page->whereIn('user_id', $user_id);
     }
     if ($data->device_id) {
@@ -57,11 +56,10 @@ class guest_c extends Controller
       $page = $page->where('device_id', device::orderBy('device_id')->first()->device_id);
     }
     $device = $page->paginate(10)->map(function($r){
-      $user = User::where('id', $r->user_id)->first();
-      $user->id = $r->id;
+      $user = User::where('user_id', $r->user_id)->first();
       return $user;
     });
-    dd($device);
+    // dd($device);
     return $device;
   }
   function devices_list(Request $data){
