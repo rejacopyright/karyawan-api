@@ -15,6 +15,10 @@ Route::group(["middleware" => "auth:admin-api"], function(){
   Route::get('/', function(){
     return 'Nanti di isi dokumentasi penggunaan API, Endpoint, Method, dll';
   });
+  // Dashboard
+  Route::get('dashboard', 'home_c@dashboard');
+  Route::get('grafik', 'home_c@grafik');
+
   Route::get('user', 'user_c@user');
   Route::get('user/detail/{user_id}', 'user_c@detail');
   Route::post('user/store', 'user_c@store');
