@@ -36,6 +36,20 @@ Route::group(["middleware" => "auth:admin-api"], function(){
   Route::post('jabatan/update', 'jabatan_c@update');
   Route::post('jabatan/delete', 'jabatan_c@delete');
   Route::get('jabatan/detail/{jabatan_id}', 'jabatan_c@detail');
+  Route::get('jabatan/multiple', 'jabatan_c@multiple');
+  // Payroll
+  Route::get('payroll', 'payroll_c@payroll');
+  Route::post('payroll/store', 'payroll_c@store');
+  Route::post('payroll/update', 'payroll_c@update');
+  Route::get('payroll/detail/{payroll_id}', 'payroll_c@detail');
+  Route::get('payroll/bpjs/kesehatan', 'payroll_c@bpjs_kesehatan');
+  Route::post('payroll/bpjs/kesehatan/update', 'payroll_c@bpjs_kesehatan_update');
+  Route::get('payroll/bpjs/ketenagakerjaan', 'payroll_c@bpjs_ketenagakerjaan');
+  Route::post('payroll/bpjs/ketenagakerjaan/update', 'payroll_c@bpjs_ketenagakerjaan_update');
+  Route::get('payroll/pph/ptkp', 'payroll_c@pph_ptkp');
+  Route::post('payroll/pph/ptkp/update', 'payroll_c@pph_ptkp_update');
+  Route::get('payroll/pph/pkp', 'payroll_c@pph_pkp');
+  Route::post('payroll/pph/pkp/update', 'payroll_c@pph_pkp_update');
   // Setting
   Route::get('setting', 'setting_c@setting');
   Route::post('setting/update', 'setting_c@update');

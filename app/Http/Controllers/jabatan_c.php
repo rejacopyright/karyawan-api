@@ -21,6 +21,7 @@ class jabatan_c extends Controller
     $jabatan = new jabatan;
     $jabatan->jabatan_id = $jabatan_id;
     $jabatan->name = $data->name;
+    $jabatan->salary = $data->salary;
     $jabatan->desc = $data->desc;
     $jabatan->save();
     return $jabatan;
@@ -28,12 +29,17 @@ class jabatan_c extends Controller
   function update(Request $data){
     $jabatan = jabatan::where('jabatan_id', $data->jabatan_id)->first();
     if ($data->name) { $jabatan->name = $data->name; }
+    if ($data->salary) { $jabatan->salary = $data->salary; }
     if ($data->desc) { $jabatan->desc = $data->desc; }
     $jabatan->save();
     return $jabatan;
   }
   function detail($jabatan_id){
     $jabatan = jabatan::where('jabatan_id', $jabatan_id)->first();
+    return compact('jabatan');
+  }
+  function multiple(Request $data){
+    $jabatan = jabatan::whereIn('jabatan_id', $data->jabatan_id ?? [])->get();
     return compact('jabatan');
   }
   function delete(Request $data){
