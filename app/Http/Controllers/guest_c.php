@@ -88,8 +88,8 @@ class guest_c extends Controller
     return $device;
   }
   function devices_list(Request $data){
-    $all = device::distinct('device_id')->pluck('device_id')->all();
-    $default = device::orderBy('device_id')->first()->device_id;
+    $all = device::whereDate('created_at', Carbon::today())->distinct('device_id')->pluck('device_id')->all();
+    $default = device::whereDate('created_at', Carbon::today())->orderBy('device_id')->first()->device_id;
     return compact('all', 'default');
   }
 }
