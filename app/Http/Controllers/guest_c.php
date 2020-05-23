@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\face;
 use App\device;
 use App\User;
@@ -30,7 +31,7 @@ class guest_c extends Controller
       $i['first_capture'] = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'ASC')->where('user_id', $i->user_id)->pluck('created_at')->first();
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
-    });
+    })->sortByDesc('created_at')->values();
     $user_id = device::whereDate('created_at', Carbon::today())->distinct('user_id')->pluck('user_id')->all();
     $absen_page = User::whereNotIn('user_id', $user_id);
     if ($data->q) { $absen_page->where('name', 'like', '%'.$data->q.'%'); }
