@@ -24,9 +24,10 @@ class guest_c extends Controller
     $device_page = $today->groupBy('user_id')->paginate(10);
     $hadir = $device_page->map(function($i) use($today){
       $usr = User::where('user_id', $i->user_id)->first();
+      $device = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->where('user_id', $i->user_id);
+      $i = $device->first();
       $i['user'] = $usr;
-      $i['first_capture'] = device::whereDate('created_at', Carbon::today())->where('user_id', $i->user_id)->orderBy('created_at', 'ASC')->pluck('created_at')->first();
-      $i['last_capture'] = device::whereDate('created_at', Carbon::today())->where('user_id', $i->user_id)->orderBy('created_at', 'DESC')->pluck('created_at')->first();
+      $i['first_capture'] = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'ASC')->where('user_id', $i->user_id)->pluck('created_at')->first();
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     });
