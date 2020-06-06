@@ -29,6 +29,7 @@ class guest_c extends Controller
       $i = $device->first();
       $i['user'] = $usr;
       $i['first_capture'] = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'ASC')->where('user_id', $i->user_id)->pluck('created_at')->first();
+      // dump($i);
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     })->sortByDesc('created_at')->values();

@@ -53,7 +53,11 @@ Route::group(["middleware" => "auth:admin-api"], function(){
   // Setting
   Route::get('setting', 'setting_c@setting');
   Route::post('setting/update', 'setting_c@update');
-  Route::get('absen', 'absen_c@absen');
+  Route::get('absen/hadir', 'absen_c@hadir');
+  Route::get('absen/absen', 'absen_c@absen');
+  Route::get('absen/ijin', 'absen_c@ijin');
+  Route::get('absen/cuti', 'absen_c@cuti');
+  Route::get('absen/count', 'absen_c@absen_count');
   // TESTER
   Route::get('absen/test', 'absen_c@test');
 });
