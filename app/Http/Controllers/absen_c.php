@@ -19,7 +19,7 @@ class absen_c extends Controller
     $to = $data->to .' 23:59:59';
     $now = Carbon::today();
     $dt = array($from ?? $now, $to ?? $now);
-    $date = device::whereBetween('created_at', $dt);
+    $date = device::whereBetween('created_at', $dt)->where('user_id', '!=', 0);
     if ($data->q) {
       $user_query = user::where('name', 'like', '%'.$data->q.'%')->distinct('user_id')->pluck('user_id')->all();
       $date->whereIn('user_id', $user_query);
@@ -52,7 +52,7 @@ class absen_c extends Controller
     if ($data->sortby == 'counter') { if ($data->type == 'asc') { $hadir = $hadir->sortby('count')->values(); }else { $hadir = $hadir->sortbydesc('count')->values(); } }
     if ($data->sortby == 'name') { if ($data->type == 'asc') { $hadir = $hadir->sortby('name')->values(); }else { $hadir = $hadir->sortbydesc('name')->values(); } }
 
-    $count = device::whereBetween('created_at', $dt)->count();
+    $count = device::whereBetween('created_at', $dt)->where('user_id', '!=', 0)->count();
     return compact('hadir', 'page', 'count');
   }
   function hadir_user(Request $data){
@@ -84,7 +84,7 @@ class absen_c extends Controller
     $to = $data->to .' 23:59:59';
     $now = Carbon::today();
     $dt = array($from ?? $now, $to ?? $now);
-    $date = device::whereBetween('created_at', $dt)->orderBy('created_at');
+    $date = device::whereBetween('created_at', $dt)->where('user_id', '!=', 0)->orderBy('created_at');
     // HADIR
 
     // ================ TEST ================
@@ -113,7 +113,7 @@ class absen_c extends Controller
     $dt = $data->from;
     $dt = $data->to;
     $now = Carbon::today();
-    $user_id = device::whereDate('created_at', $dt ?? $now)->distinct('user_id')->pluck('user_id')->all();
+    $user_id = device::whereDate('created_at', $dt ?? $now)->where('user_id', '!=', 0)->distinct('user_id')->pluck('user_id')->all();
     $page = User::whereNotIn('user_id', $user_id);
     if ($data->q) { $page->where('name', 'like', '%'.$data->q.'%'); }
     if ($data->sortby == 'name') { if ($data->type == 'asc') { $page = $page->orderby('name', 'asc'); }else { $page = $page->orderBy('name', 'desc'); } }
@@ -150,7 +150,7 @@ class absen_c extends Controller
   }
   function absen_count(){
     $now = Carbon::today();
-    $user_id = device::whereDate('created_at', $now)->distinct('user_id')->pluck('user_id')->all();
+    $user_id = device::whereDate('created_at', $now)->where('user_id', '!=', 0)->distinct('user_id')->pluck('user_id')->all();
     $hadir = count($user_id);
     $absen = user::whereNotIn('user_id', $user_id)->count();
     $ijin = absensi::whereDate('created_at', $now)->where('status', 3)->count();
@@ -158,7 +158,7 @@ class absen_c extends Controller
     return compact('hadir', 'absen', 'ijin', 'cuti');
   }
   function test(Request $data){
-    $page = device::paginate(5);
+    $page = device::where('user_id', '!=', 0)->paginate(5);
     $device = $page->map(function($i){
       $i->user = user::where('user_id', $i->user_id)->first();
       return $i;
