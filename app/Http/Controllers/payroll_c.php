@@ -14,7 +14,7 @@ class payroll_c extends Controller
   function payroll(Request $data){
     $page = payroll::orderBy('updated_at', 'Desc');
     if ($data->q) { $page->where('name', 'like', '%'.$data->q.'%'); }
-    $page = $page->paginate(10);
+    $page = $page->paginate(5);
     $payroll = $page->map(function($i){
       return $i;
     });

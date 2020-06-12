@@ -17,7 +17,7 @@ class guest_c extends Controller
     return $image;
   }
   function absen(Request $data){
-    $today = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC');
+    $today = device::whereDate('created_at', Carbon::today())->where('user_id', '!=', 0)->orderBy('created_at', 'DESC');
     if ($data->q) {
       $user_query = user::where('name', 'like', '%'.$data->q.'%')->distinct('user_id')->pluck('user_id')->all();
       $today->whereIn('user_id', $user_query);

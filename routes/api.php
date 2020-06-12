@@ -54,6 +54,8 @@ Route::group(["middleware" => "auth:admin-api"], function(){
   Route::get('setting', 'setting_c@setting');
   Route::post('setting/update', 'setting_c@update');
   Route::get('absen/hadir', 'absen_c@hadir');
+  Route::get('absen/hadir/user', 'absen_c@hadir_user');
+  Route::get('absen/hadir/export', 'absen_c@hadir_export');
   Route::get('absen/absen', 'absen_c@absen');
   Route::get('absen/ijin', 'absen_c@ijin');
   Route::get('absen/cuti', 'absen_c@cuti');
