@@ -31,7 +31,7 @@ class guest_c extends Controller
       $i['jabatan'] = $usr->jabatan->name ?? '';
       $i['first_capture'] = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'ASC')->where('user_id', $i->user_id)->pluck('created_at')->first();
       // dump($i);
-      $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
+      $i['img'] = img::where('user_id', $usr->user_id)->where('user_id', '!=', 0)->orderBy('created_at', 'DESC')->first()->name;
       return $i;
     })->sortByDesc('created_at')->values();
     $user_id = device::whereDate('created_at', Carbon::today())->distinct('user_id')->pluck('user_id')->all();
