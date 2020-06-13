@@ -28,6 +28,7 @@ class guest_c extends Controller
       $device = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->where('user_id', $i->user_id);
       $i = $device->first();
       $i['user'] = $usr;
+      $i['jabatan'] = $usr->jabatan->name ?? '';
       $i['first_capture'] = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'ASC')->where('user_id', $i->user_id)->pluck('created_at')->first();
       // dump($i);
       $i['img'] = img::where('user_id', $usr->user_id)->orderBy('created_at', 'DESC')->first()->name;
@@ -41,8 +42,12 @@ class guest_c extends Controller
       $r['img'] = img::where('user_id', $r->user_id)->orderBy('created_at', 'DESC')->first()->name;
       return $r;
     });
+    $tot_user = user::count();
+    $tot_hadir = device::whereDate('created_at', Carbon::today())->where('user_id', '!=', 0)->distinct('user_id')->count();
+    $tot_absen = User::whereNotIn('user_id', $user_id)->count();
+    $resume = compact('tot_user', 'tot_hadir', 'tot_absen');
     $count = device::whereDate('created_at', date('Y-m-d'))->count();
-    return compact('hadir', 'device_page', 'absen', 'absen_page', 'count');
+    return compact('hadir', 'device_page', 'absen', 'absen_page', 'count', 'resume');
   }
   function absen_backup(Request $data){
     $absen = device::whereDate('created_at', Carbon::today())->orderBy('created_at', 'DESC')->paginate(10)->map(function($i){
